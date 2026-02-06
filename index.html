@@ -20,42 +20,40 @@
     <!-- Background Canvas for Hearts -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- Main Glassmorphism Container -->
-    <main class="glass-container">
+    <!-- Main Container: Vertical Flex Stack -->
+    <main class="container">
         
-        <!-- Minion Layer (Z-Index High) -->
-        <div class="minion-display">
-            <!-- Added error handling fallback as requested -->
+        <!-- 1. Minion (Always visible) -->
+        <div class="minion-wrapper">
             <img id="minion-gif" 
                  src="https://media.tenor.com/tpsBa8JCKCoAAAAC/jojo-bizzare-adventure.gif" 
                  alt="Minion Waiting"
                  onerror="this.onerror=null; this.src='https://media.tenor.com/M1Xj1k6C7a4AAAAC/minion-waiting.gif';">
         </div>
 
-        <!-- Text Content Layer (Z-Index High) -->
-        <div class="text-content">
-            <h1 id="typewriter-text" class="handwritten-title"></h1>
+        <!-- 2. Text (Always visible) -->
+        <div class="text-wrapper">
+            <h1 id="typewriter-text" class="title"></h1>
         </div>
 
-        <!-- Interaction Layer -->
-        <div class="interaction-area">
-            <!-- Yes button (Grows behind text/minion initially) -->
+        <!-- 3. Interaction Area (Buttons) -->
+        <div class="buttons-wrapper">
             <button id="yes-btn" class="btn btn-yes">Yes</button>
-            
-            <!-- No button -->
             <button id="no-btn" class="btn btn-no">No</button>
         </div>
 
-        <!-- Hidden Message Card (Revealed at Finale) -->
+        <!-- Hidden Message Card (Overlay) -->
         <div id="message-card" class="message-card hidden">
-            <p class="poem">
-                "Tulaliloo ti amo, Bello,<br>
-                you're my number one.<br>
-                Like a banana in the sun,<br>
-                our love has just begun!<br>
-                <br>
-                <strong>Happy Valentine's Day! ❤️</strong>"
-            </p>
+            <div class="card-content">
+                <p class="poem">
+                    "Tulaliloo ti amo, Bello,<br>
+                    you're my number one.<br>
+                    Like a banana in the sun,<br>
+                    our love has just begun!<br>
+                    <br>
+                    <strong>Happy Valentine's Day! ❤️</strong>"
+                </p>
+            </div>
         </div>
 
     </main>

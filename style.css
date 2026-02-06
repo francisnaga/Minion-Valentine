@@ -1,13 +1,15 @@
 :root {
-    --color-yellow: #FDE047; /* Brighter Yellow */
-    --color-red: #BE123C; /* Darker Rose Red */
-    --color-pink: #FBCFE8; /* Slightly darker pink */
-    --color-gold: #F59E0B;
+    /* Adjusted Palette - Darker Pink Theme */
+    --color-bg-start: #FCE7F3;
+    --color-bg-end: #DB2777; /* Pink-600 */
+    --color-glass: rgba(255, 255, 255, 0.25);
+    --color-glass-border: rgba(255, 255, 255, 0.4);
+    
+    --color-yes: #E11D48; /* Rose-600 */
+    --color-no: #FDE047; /* Yellow-300 */
     
     --font-hand: 'Gaegu', cursive;
     --font-heading: 'Fredoka', sans-serif;
-    
-    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 * {
@@ -20,8 +22,7 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    /* Darker, richer gradient */
-    background: radial-gradient(circle at 50% 10%, #FCE7F3 0%, #F472B6 60%, #EC4899 100%);
+    background: radial-gradient(circle at 50% 0%, var(--color-bg-start), var(--color-bg-end));
     font-family: var(--font-hand);
     display: flex;
     justify-content: center;
@@ -29,154 +30,145 @@ body {
     transition: background 1s ease;
 }
 
-body.celebration-mode {
-    background: linear-gradient(135deg, #FDE68A 0%, #F472B6 100%); /* Gold/Pink Gradient */
+body.celebration {
+    background: radial-gradient(circle at 50% 50%, #F59E0B, #B45309); /* Gold theme */
 }
 
 #heartCanvas {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 0;
     pointer-events: none;
 }
 
-/* Glassmorphism Container */
-.glass-container {
+/* Main Layout Container */
+.container {
     position: relative;
     z-index: 10;
     width: 90%;
-    max-width: 550px;
-    background: rgba(255, 255, 255, 0.3); /* Slightly more transparent */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 24px;
-    padding: 1.5rem; /* Reduced padding for mobile */
+    max-width: 480px; /* Constrained width for mobile feel on desktop */
+    min-height: 60vh;
+    
+    /* Vertical Stack */
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    isolation: isolate; 
+    justify-content: center;
+    gap: 1.5rem;
+    
+    /* Classy Glassmorphism */
+    background: var(--color-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid var(--color-glass-border);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.2);
 }
 
-/* Layering Strategy:
-   Minion & Text: Z-Index 50 (Top) -- CHANGED FOR VISIBILITY
-   Buttons: Z-Index 10 (Middle/Growth Layer)
-*/
-
-.minion-display {
-    width: 220px;
-    height: 220px;
-    z-index: 50; /* Ensuring it stays above the growing button */
-    position: relative;
-    margin-bottom: 1rem;
-    pointer-events: none; /* Let clicks pass through if needed */
-}
-
-.minion-display img {
+/* 1. Minion Wrapper */
+.minion-wrapper {
     width: 100%;
-    height: 100%;
+    height: 200px; /* Fixed height to reserve space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.minion-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
 
-.text-content {
-    z-index: 50; /* Ensuring it stays above the growing button */
-    position: relative;
-    margin-bottom: 2rem;
+/* 2. Text Wrapper */
+.text-wrapper {
+    width: 100%;
     text-align: center;
-    pointer-events: none;
+    min-height: 3.5rem; /* Reserve space for 2 lines of text */
+    flex-shrink: 0;
 }
 
-.handwritten-title {
+.title {
     font-family: var(--font-heading);
-    color: #9F1239;
-    font-size: 1.8rem;
-    min-height: 4.5rem;
+    color: #881337;
+    font-size: 1.6rem;
     line-height: 1.3;
 }
 
-.interaction-area {
-    position: relative;
-    z-index: 10;
-    width: 100%;
+/* 3. Buttons Wrapper */
+.buttons-wrapper {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    height: 80px; /* Reserve space for buttons */
+    gap: 1rem;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 80px; /* Space for buttons */
+    position: relative;
+    /* No absolute positioning for buttons wrapper itself, let it flow */
 }
 
-/* Buttons */
 .btn {
     font-family: var(--font-hand);
     font-size: 1.5rem;
     font-weight: 700;
-    border: none;
+    padding: 0.8rem 2rem;
     border-radius: 50px;
+    border: none;
     cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     user-select: none;
-    padding: 0.8rem 2.2rem;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy smooth scaling */
-    will-change: transform; /* Hardware acceleration hint */
 }
 
 .btn-yes {
-    background-color: var(--color-red);
+    background-color: var(--color-yes);
     color: white;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
-    position: absolute; 
-    z-index: 10; /* Higher than No */
-}
-
-.btn-yes.covering {
-    z-index: 100; 
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
+    z-index: 2;
+    /* We will use transform scale in JS, but constrained */
 }
 
 .btn-no {
-    background-color: var(--color-yellow);
-    color: #92400E;
-    box-shadow: 0 4px 10px rgba(254, 240, 138, 0.5);
-    z-index: 5; /* Lower than Yes (Behind) */
-    position: absolute;
-    transform: translate3d(70px, 0, 0); 
+    background-color: var(--color-no);
+    color: #713F12;
+    box-shadow: 0 4px 12px rgba(253, 224, 71, 0.4);
+    z-index: 3; /* Sit on top of 'Yes' if it grows slightly under */
 }
 
-/* Initial positioning adjustments since they are absolute now */
-.btn-yes {
-    transform: translate3d(-70px, 0, 0);
-}
-
-/* Message Card */
+/* Hidden Message Card */
 .message-card {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 90%;
-    background: #FFF;
-    padding: 2.5rem;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.9);
+    border-radius: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
     opacity: 0;
     pointer-events: none;
-    z-index: 200; /* Highest */
-    transform: translate(-50%, -50%) scale(0.9);
-    transition: all 0.5s var(--ease-spring);
+    transform: scale(0.9);
+    transition: all 0.5s ease;
 }
 
 .message-card.visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
+}
+
+.card-content {
+    text-align: center;
+    padding: 2rem;
 }
 
 .poem {
     font-size: 1.5rem;
-    color: #BE185D;
+    color: #9D174D;
     line-height: 1.6;
 }
 
@@ -184,23 +176,8 @@ body.celebration-mode {
     display: none;
 }
 
-/* Media Queries */
-@media (min-width: 768px) {
-    .glass-container {
-        padding: 4rem;
-    }
-    .minion-display {
-        width: 260px;
-        height: 260px;
-    }
-    .handwritten-title {
-        font-size: 2.4rem;
-    }
-    .btn {
-        font-size: 2rem;
-        padding: 1rem 3rem;
-    }
-    
-    .btn-yes { transform: translate3d(-90px, 0, 0); }
-    .btn-no { transform: translate3d(90px, 0, 0); }
+/* Helper to hide content during transition */
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
