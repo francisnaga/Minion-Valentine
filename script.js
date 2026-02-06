@@ -1,10 +1,10 @@
 // Minion Love Laboratory - Final Boss Edition
 
-// Asset Registry with Direct Giphy URLs
+// Asset Registry with Direct Giphy URLs (WebP)
 const ASSETS = {
-    waiting: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/18S9xCHfYgH44/giphy.gif',
-    shocked: 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tP7axeXWloTqS2s/giphy.gif',
-    celebration: 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vR6p5uG0iR5D0ly/giphy.gif'
+    waiting: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/18S9xCHfYgH44/giphy.webp',
+    shocked: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tP7axeXWloTqS2s/giphy.webp',
+    celebration: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vR6p5uG0iR5D0ly/giphy.webp'
 };
 
 const NO_PHRASES = [
@@ -95,7 +95,7 @@ class App {
         // 2. Grow Yes Button (Scale 1.2x)
         // Maintain the initial translation separation and add scale
         const baseOffset = window.innerWidth < 768 ? -70 : -90;
-        this.state.yesScale *= 1.2; // Reduced from 1.3 to prevent growing too much too fast
+        this.state.yesScale *= 1.2; // Controlled growth
         this.yesBtn.style.transform = `translate3d(${baseOffset}px, 0, 0) scale(${this.state.yesScale})`;
 
         // 3. Shocked Minion after 4 clicks
@@ -108,12 +108,12 @@ class App {
 
     moveNoButton() {
         // Calculate random position within visible viewport bounds
-        // Subtract button dimensions (approx 100x50) to keep it fully on screen
-        const maxX = window.innerWidth - 120;
+        // Subtract button dimensions (approx 120x60) to keep it fully on screen
+        const maxX = window.innerWidth - 140;
         const maxY = window.innerHeight - 80;
         
-        const x = Math.max(10, Math.random() * maxX);
-        const y = Math.max(10, Math.random() * maxY);
+        const x = Math.max(20, Math.random() * maxX);
+        const y = Math.max(20, Math.random() * maxY);
         
         this.noBtn.style.position = 'fixed';
         this.noBtn.style.left = `${x}px`;
@@ -139,8 +139,7 @@ class App {
         this.noBtn.style.display = 'none';
         this.title.style.opacity = '0';
         
-        // Make Yes button cover everything then fade? Or just hide it? 
-        // User asked for "Takeover". Let's scale it massive then fade out content.
+        // Finale state for Yes Button
         this.yesBtn.style.zIndex = '100';
         this.yesBtn.style.transform += ` scale(10)`;
         this.yesBtn.style.opacity = '0'; // Disappear into the background color

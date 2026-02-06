@@ -62,7 +62,7 @@ body.celebration-mode {
 }
 
 /* Layering Strategy:
-   Minion & Text: Z-Index 20 (Top)
+   Minion & Text: Z-Index 50 (Top) -- CHANGED FOR VISIBILITY
    Buttons: Z-Index 10 (Middle/Growth Layer)
 */
 
