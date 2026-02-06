@@ -2,9 +2,9 @@
 
 // Asset Registry with Direct Giphy URLs (WebP)
 const ASSETS = {
-    waiting: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/18S9xCHfYgH44/giphy.webp',
-    shocked: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tP7axeXWloTqS2s/giphy.webp',
-    celebration: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vR6p5uG0iR5D0ly/giphy.webp'
+    waiting: 'https://media.tenor.com/tpsBa8JCKCoAAAAC/jojo-bizzare-adventure.gif', 
+    shocked: 'https://media.tenor.com/WX1Q1ZLgKWkAAAAC/awesome-approve.gif',
+    celebration: 'https://media.tenor.com/WZkN9icpKXAAAAAC/sytycd-fox.gif'
 };
 
 const NO_PHRASES = [

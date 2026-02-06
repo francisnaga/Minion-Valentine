@@ -1,8 +1,8 @@
 :root {
-    --color-yellow: #FEF08A;
-    --color-red: #DC2626;
-    --color-pink: #FDF2F8;
-    --color-gold: #FCD34D;
+    --color-yellow: #FDE047; /* Brighter Yellow */
+    --color-red: #BE123C; /* Darker Rose Red */
+    --color-pink: #FBCFE8; /* Slightly darker pink */
+    --color-gold: #F59E0B;
     
     --font-hand: 'Gaegu', cursive;
     --font-heading: 'Fredoka', sans-serif;
@@ -20,7 +20,8 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: linear-gradient(135deg, #FFF1F2 0%, #FECACA 100%);
+    /* Darker, richer gradient */
+    background: radial-gradient(circle at 50% 10%, #FCE7F3 0%, #F472B6 60%, #EC4899 100%);
     font-family: var(--font-hand);
     display: flex;
     justify-content: center;
@@ -48,17 +49,17 @@ body.celebration-mode {
     z-index: 10;
     width: 90%;
     max-width: 550px;
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    border-radius: 30px;
-    padding: 3rem 2rem;
+    background: rgba(255, 255, 255, 0.3); /* Slightly more transparent */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    padding: 1.5rem; /* Reduced padding for mobile */
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-    isolation: isolate; /* Create new stacking context */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    isolation: isolate; 
 }
 
 /* Layering Strategy:
