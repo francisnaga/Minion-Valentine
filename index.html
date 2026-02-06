@@ -3,61 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Minion Love Laboratory</title>
+    <title>Ultimate Minion Valentine! 🍌</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- Canvas Confetti -->
+    <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --color-bg-start: #FCE7F3;
+            --color-bg-end: #BE123C;
+            --color-yes: #E11D48;
+            --color-no: #FDE047;
+            --font-hand: 'Gaegu', cursive;
+            --font-heading: 'Fredoka', sans-serif;
+            --transition-bouncy: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 0%, var(--color-bg-start) 0%, #F472B6 70%, var(--color-bg-end) 100%);
+            font-family: var(--font-hand);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.8s ease;
+        }
+
+        body.show-yay {
+            background: radial-gradient(circle at 50% 50%, #F59E0B, #B45309);
+        }
+
+        #heartCanvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            padding: 2.5rem 1.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .minion-box {
+            width: 100%;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; 
+            position: relative;
+        }
+
+        .minion-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+        }
+
+        .text-box {
+            position: relative;
+            z-index: 999; /* Text stays above growing button */
+            width: 100%;
+            min-height: 4rem;
+        }
+
+        .title {
+            font-family: var(--font-heading);
+            color: #881337;
+            font-size: 1.8rem;
+            line-height: 1.2;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.4);
+        }
+
+        .actions {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            min-height: 100px;
+        }
+
+        .btn {
+            font-family: var(--font-hand);
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 0.9rem 2.2rem;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s var(--transition-bouncy);
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .btn-yes {
+            background-color: var(--color-yes);
+            color: white;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+            position: relative;
+            z-index: 50; 
+        }
+
+        .btn-no {
+            background-color: var(--color-no);
+            color: #713F12;
+            box-shadow: 0 4px 15px rgba(253, 224, 71, 0.4);
+            z-index: 60;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .btn-no.teleport {
+            position: fixed;
+            transition: none;
+        }
+
+        .yay-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+            transition: all 0.7s var(--transition-bouncy);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .yay-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .yay-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: #E11D48;
+            margin-bottom: 2rem;
+            animation: bounce 0.8s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+
+        .fallback-container {
+            font-size: 6rem;
+            display: none;
+        }
+    </style>
 </head>
 <body>
     
-    <!-- Background Canvas for Hearts -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- Main Container: Vertical Flex Stack -->
     <main class="container">
         
-        <!-- 1. Minion (Always visible) -->
-        <div class="minion-wrapper">
+        <div class="minion-box">
+            <!-- Triple-Redundant Loading System: Media Server (Primary) -> User Link (Secondary) -> Emoji (Tertiary) -->
             <img id="minion-gif" 
-                 src="https://media.tenor.com/tpsBa8JCKCoAAAAC/jojo-bizzare-adventure.gif" 
-                 alt="Minion Waiting"
-                 onerror="this.onerror=null; this.src='https://media.tenor.com/M1Xj1k6C7a4AAAAC/minion-waiting.gif';">
+                 src="https://media.tenor.com/tpsBa8JCKCoAAAAC/minions-waiting.gif" 
+                 alt="Minion"
+                 onerror="handleImageError(this, 'waiting')">
+            <div id="fallback-waiting" class="fallback-container">🍌</div>
         </div>
 
-        <!-- 2. Text (Always visible) -->
-        <div class="text-wrapper">
+        <div class="text-box">
             <h1 id="typewriter-text" class="title"></h1>
         </div>
 
-        <!-- 3. Interaction Area (Buttons) -->
-        <div class="buttons-wrapper">
+        <div class="actions">
             <button id="yes-btn" class="btn btn-yes">Yes</button>
             <button id="no-btn" class="btn btn-no">No</button>
         </div>
 
-        <!-- Hidden Message Card (Overlay) -->
-        <div id="message-card" class="message-card hidden">
-            <div class="card-content">
-                <p class="poem">
-                    "Tulaliloo ti amo, Bello,<br>
-                    you're my number one.<br>
-                    Like a banana in the sun,<br>
-                    our love has just begun!<br>
-                    <br>
-                    <strong>Happy Valentine's Day! ❤️</strong>"
-                </p>
-            </div>
-        </div>
-
     </main>
 
-    <script src="script.js"></script>
+    <!-- Finale Card -->
+    <div id="yay-screen" class="yay-screen">
+        <h2 class="yay-title">YAYYY!!! ❤️</h2>
+        <div class="minion-box" style="height: 250px;">
+             <img id="celebration-gif"
+                  src="https://media.tenor.com/WZkN9icpKXAAAAAC/sytycd-fox.gif" 
+                  alt="Celebration"
+                  onerror="handleImageError(this, 'celebration')">
+             <div id="fallback-celebration" class="fallback-container">❤️</div>
+        </div>
+        <p style="font-size: 2rem; color: #BE123C; margin-top: 2rem; font-weight: 700;">I knew you'd say yes! 🍌</p>
+    </div>
+
+    <script>
+        const NO_PHRASES = [
+            "Are you sure?",
+            "Really?",
+            "Pleeaseee!",
+            "I'm gonna cry...",
+            "Last chance!"
+        ];
+
+        // Backup assets in case primary media server fails
+        const BACKUPS = {
+            waiting: 'https://i.giphy.com/18S9xCHfYgH44.webp',
+            celebration: 'https://i.giphy.com/l3vR6p5uG0ly.webp'
+        };
+
+        function handleImageError(img, type) {
+            console.warn(`Primary asset failed for ${type}. Switching to user-provided link...`);
+            // Check if we already tried the user-provided link
+            if (img.src === BACKUPS[type]) {
+                // If that also fails, show the emoji
+                img.style.display = 'none';
+                document.getElementById(`fallback-${type}`).style.display = 'block';
+            } else {
+                img.src = BACKUPS[type];
+            }
+        }
+
+        class Heart {
+            constructor(w, h) {
+                this.w = w; this.h = h;
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * this.w;
+                this.y = this.h + 20;
+                this.size = Math.random() * 25 + 10;
+                this.speed = Math.random() * 1.5 + 0.5;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < -40) this.reset();
+            }
+            draw(ctx) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.font = `${this.size}px Arial`;
+                ctx.fillText('❤️', this.x, this.y);
+            }
+        }
+
+        class ValentineApp {
+            constructor() {
+                this.yesBtn = document.getElementById('yes-btn');
+                this.noBtn = document.getElementById('no-btn');
+                this.titleText = document.getElementById('typewriter-text');
+                this.yayScreen = document.getElementById('yay-screen');
+                
+                this.noCount = 0;
+                this.yesScale = 1;
+                this.teleportActive = false;
+
+                this.init();
+            }
+
+            init() {
+                this.initBackground();
+                this.runTypewriter("Will you be my Valentine?");
+                this.attachEvents();
+            }
+
+            attachEvents() {
+                this.noBtn.addEventListener('click', () => this.handleNo());
+                this.yesBtn.addEventListener('click', () => this.handleYes());
+                
+                ['mouseenter', 'touchstart'].forEach(evt => {
+                    this.noBtn.addEventListener(evt, (e) => {
+                        if (this.teleportActive) {
+                            if (e.type === 'touchstart') e.preventDefault();
+                            this.teleport();
+                        }
+                    });
+                });
+            }
+
+            runTypewriter(text, i = 0) {
+                if (i < text.length) {
+                    this.titleText.textContent += text.charAt(i);
+                    setTimeout(() => this.runTypewriter(text, i + 1), 50);
+                }
+            }
+
+            handleNo() {
+                this.noCount++;
+                
+                // 1. Inflate Yes Button (1.4x Growth)
+                this.yesScale *= 1.4;
+                this.yesBtn.style.transform = `scale(${this.yesScale})`;
+
+                // 2. Change Dialogue
+                const textIdx = Math.min(this.noCount - 1, NO_PHRASES.length - 1);
+                this.noBtn.textContent = NO_PHRASES[textIdx];
+
+                // 3. Activate Sabotage (Teleport after 5 clicks)
+                if (this.noCount >= 5) {
+                    this.teleportActive = true;
+                    this.noBtn.classList.add('teleport');
+                    this.teleport();
+                }
+            }
+
+            teleport() {
+                const margin = 50;
+                const maxX = window.innerWidth - this.noBtn.offsetWidth - margin;
+                const maxY = window.innerHeight - this.noBtn.offsetHeight - margin;
+                
+                const randomX = Math.max(margin, Math.random() * maxX);
+                const randomY = Math.max(margin, Math.random() * maxY);
+                
+                this.noBtn.style.left = `${randomX}px`;
+                this.noBtn.style.top = `${randomY}px`;
+            }
+
+            handleYes() {
+                // High Density Confetti burst
+                const count = 300;
+                const defaults = { origin: { y: 0.7 } };
+
+                function fire(particleRatio, opts) {
+                    confetti({
+                        ...defaults,
+                        ...opts,
+                        particleCount: Math.floor(count * particleRatio)
+                    });
+                }
+
+                fire(0.25, { spread: 26, startVelocity: 55 });
+                fire(0.2, { spread: 60 });
+                fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+                fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+                fire(0.1, { spread: 120, startVelocity: 45 });
+
+                document.body.classList.add('show-yay');
+                this.yayScreen.classList.add('active');
+            }
+
+            initBackground() {
+                const canvas = document.getElementById('heartCanvas');
+                const ctx = canvas.getContext('2d');
+                let hearts = [];
+
+                const resize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    hearts = [];
+                    const count = window.innerWidth < 768 ? 25 : 55;
+                    for(let i=0; i<count; i++) hearts.push(new Heart(canvas.width, canvas.height));
+                };
+                
+                window.addEventListener('resize', resize);
+                resize();
+
+                const loop = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    hearts.forEach(h => { h.update(); h.draw(ctx); });
+                    requestAnimationFrame(loop);
+                };
+                loop();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new ValentineApp();
+        });
+    </script>
 </body>
 </html>
