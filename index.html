@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Minion Love Laboratory</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- Background Canvas for Hearts -->
+    <canvas id="heartCanvas"></canvas>
+
+    <!-- Main Glassmorphism Container -->
+    <main class="glass-container">
+        
+        <!-- Minion Layer (Z-Index High) -->
+        <div class="minion-display">
+            <!-- Added error handling fallback as requested -->
+            <img id="minion-gif" 
+                 src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zid3Z0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0ZzR0JmJlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/18S9xCHfYgH44/giphy.gif" 
+                 alt="Minion Waiting"
+                 onerror="this.onerror=null; this.src='https://media.tenor.com/M1Xj1k6C7a4AAAAC/minion-waiting.gif';">
+        </div>
+
+        <!-- Text Content Layer (Z-Index High) -->
+        <div class="text-content">
+            <h1 id="typewriter-text" class="handwritten-title"></h1>
+        </div>
+
+        <!-- Interaction Layer -->
+        <div class="interaction-area">
+            <!-- Yes button (Grows behind text/minion initially) -->
+            <button id="yes-btn" class="btn btn-yes">Yes</button>
+            
+            <!-- No button -->
+            <button id="no-btn" class="btn btn-no">No</button>
+        </div>
+
+        <!-- Hidden Message Card (Revealed at Finale) -->
+        <div id="message-card" class="message-card hidden">
+            <p class="poem">
+                "Tulaliloo ti amo, Bello,<br>
+                you're my number one.<br>
+                Like a banana in the sun,<br>
+                our love has just begun!<br>
+                <br>
+                <strong>Happy Valentine's Day! ❤️</strong>"
+            </p>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
